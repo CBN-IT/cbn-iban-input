@@ -183,10 +183,15 @@ style this element.
 					return;
 				}
 				
-				var value = event.currentTarget.value;
-				var oldValue = value;
+				var oldValue = event.currentTarget.value;
+				var value = oldValue;
+				
 				var start = this.$.input.selectionStart;
-				var previousCharASpace = value ? value.charAt(start - 1) == ' ' : false;
+				var compactStart = 0;
+				for (var i=0; i<start; i++) {
+					if (oldValue[i] != ' ') 
+						compactStart++;
+				}
 				
 				value = value.replace(/\s+/g, '');
 				
@@ -197,13 +202,10 @@ style this element.
 				this.$.input.value = formattedValue;
 				this.$.container._handleValueAndAutoValidate(this.$.input);
 				
-				// If the character right before the selection is a newly inserted
-				// space, we need to advance the selection to maintain the caret position.
-				if (!previousCharASpace && oldValue.charAt(start - 1) == ' ') {
-					start += 1;
-				}
-				this.$.input.selectionStart = start + 1;
-				this.$.input.selectionEnd = start + 1;
+				// adjust the selection taking account of the inserted spaces
+				start = compactStart + Math.floor(compactStart / 4);
+				this.$.input.selectionStart = start;
+				this.$.input.selectionEnd = start;
 				
 				// if valid, fire an event with the details of the IBAN code
 				if (this._validate(formattedValue)) {
