@@ -31,6 +31,7 @@ style this element.
 
 <link rel="import" href="../cbn-form/lib/include.html" />
 <link rel="import" href="../cbn-form/elements/polymer-elements.html" />
+<link rel="import" href="../iron-a11y-keys/iron-a11y-keys.html">
 
 <script src="lib/iban-validator.js"></script>
 
@@ -49,8 +50,10 @@ style this element.
 							   auto-validate$="[[autoValidate]]" invalid="[[invalid]]">
 			
 			<label hidden$="[[!label]]">[[label]]</label>
-			
+			<iron-a11y-keys id="a11y" target="[[_target]]" keys="backspace"
+							on-keys-pressed="_onBackspace"></iron-a11y-keys>
 			<input id="input" on-input="_inputValueChanged"
+				   on-copy="_changeClipboardValue"
 				   aria-labelledby$="[[_ariaLabelledBy]]" aria-describedby$="[[_ariaDescribedBy]]"
 				   disabled$="[[disabled]]" required$="[[required]]"
 				   readonly$="[[readonly]]" invalid="{{invalid}}" type="text"
@@ -115,6 +118,12 @@ style this element.
 				_delayedValue: {
 					type: String,
 					value: ''
+				},
+				_target: {
+					type: Object,
+					value: function() {
+						return this.$.input;
+					}
 				}
 			},
 			
@@ -185,7 +194,6 @@ style this element.
 				
 				var oldValue = event.currentTarget.value;
 				var value = oldValue;
-				
 				var start = this.$.input.selectionStart;
 				var compactStart = 0;
 				for (var i=0; i<start; i++) {
@@ -246,6 +254,57 @@ style this element.
 			 */
 			_validate: function(value) {
 				return value && IbanInput.validateIban(value);
+			},
+			/**
+			 * Listen for the Copy Clipboard event and change the value from the formatted value to the unformatted value
+			 * This only changes the clipboard value if he selected everything
+			 * @param e
+             * @private
+             */
+			_changeClipboardValue:function(e){
+				var input = this.$.input;
+				var startPos = input.selectionStart;
+				var endPos = input.selectionEnd;
+				if (startPos !== 0 || endPos !== input.value.length) {
+					return;
+				}
+				
+				var isIe = (navigator.userAgent.toLowerCase().indexOf("msie") != -1
+				|| navigator.userAgent.toLowerCase().indexOf("trident") != -1);
+				
+				var textToPutOnClipboard = this.value;
+				if (isIe) {
+					window.clipboardData.setData('Text', textToPutOnClipboard);
+				} else {
+					e.clipboardData.setData('text/plain', textToPutOnClipboard);
+				}
+				e.preventDefault();
+			},
+			/**
+			 * Fix the problem when the user hits backspace after a white space in the middle of the text
+			 * when the user hits backspace, the whitespace is removed but re-put in the text by the value formatter
+			 * It checks to see if onKeyDown the value before the cursor is an whitespace, and moves the cursor before it
+			 * @param e
+             * @private
+             */
+			_onBackspace: function(e){
+				var input = this.$.input;
+				var startPos = input.selectionStart;
+				var endPos = input.selectionEnd;
+				if(startPos!==endPos){
+					//the backspace event will only delete the selection
+					return;
+				}
+				if(startPos===0){
+					return;
+				}
+				//get char that is before the cursor. If it is a space, move the cursor before the space
+				if (input.value[startPos - 1] !== " ") {
+					return;
+				}
+				//move the cursor 1 spot;
+				this.$.input.selectionStart = startPos-1;
+				this.$.input.selectionEnd = startPos-1;
 			}
 			
 		});

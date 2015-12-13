@@ -14,7 +14,8 @@
     "dependencies": {
         "polymer": "Polymer/polymer#^1.2",
         "paper-input": "PolymerElements/paper-input#^1.0",
-        "cbn-form": "git@bitbucket.org:cbn-it/cbn-form.git#polymer1.0"
+        "cbn-form": "git@bitbucket.org:cbn-it/cbn-form.git#polymer1.0",
+        "iron-a11y-keys": "PolymerElements/iron-a11y-keys#^1.0.0"
     },
     "devDependencies": {
         "web-component-tester": "Polymer/web-component-tester",
