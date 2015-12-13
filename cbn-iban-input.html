@@ -253,17 +253,17 @@ style this element.
 			 * @param e
              * @private
              */
-			_changeClipboardValue:function(e){
+			_changeClipboardValue: function (e) {
 				var input = this.$.input;
 				var startPos = input.selectionStart;
 				var endPos = input.selectionEnd;
 				if (startPos !== 0 || endPos !== input.value.length) {
 					return;
 				}
-				
+
 				var isIe = (navigator.userAgent.toLowerCase().indexOf("msie") != -1
 				|| navigator.userAgent.toLowerCase().indexOf("trident") != -1);
-				
+
 				var textToPutOnClipboard = this.value;
 				if (isIe) {
 					window.clipboardData.setData('Text', textToPutOnClipboard);
@@ -279,15 +279,15 @@ style this element.
 			 * @param e
              * @private
              */
-			_onBackspace: function(e){
+			_onBackspace: function (e) {
 				var input = this.$.input;
 				var startPos = input.selectionStart;
 				var endPos = input.selectionEnd;
-				if(startPos!==endPos){
+				if (startPos !== endPos) {
 					//the backspace event will only delete the selection
 					return;
 				}
-				if(startPos===0){
+				if (startPos === 0) {
 					return;
 				}
 				//get char that is before the cursor. If it is a space, move the cursor before the space
@@ -295,8 +295,8 @@ style this element.
 					return;
 				}
 				//move the cursor 1 spot;
-				this.$.input.selectionStart = startPos-1;
-				this.$.input.selectionEnd = startPos-1;
+				this.$.input.selectionStart = startPos - 1;
+				this.$.input.selectionEnd = startPos - 1;
 			}
 			
 		});
