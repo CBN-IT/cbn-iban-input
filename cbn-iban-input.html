@@ -93,7 +93,7 @@ style this element.
 				 */
 				label: {
 					type: String,
-					value: 'Card number'
+					value: 'IBAN'
 				},
 				
 				/**
@@ -297,9 +297,17 @@ style this element.
 				//move the cursor 1 spot;
 				this.$.input.selectionStart = startPos - 1;
 				this.$.input.selectionEnd = startPos - 1;
+			},
+			/**
+			 * Element's dynamic attributes.
+			 */
+			dynamicAttributes: {
+				"placeholder": { type: 'attribute' }
 			}
-			
 		});
-		
+		CbnForm.registerElement('cbn-iban-input', {
+			types: ['iban'],
+			priority: 3
+		});
 	})(CbnForm.IbanInput);
 </script>
