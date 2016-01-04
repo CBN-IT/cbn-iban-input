@@ -44,7 +44,7 @@ style this element.
 	
 	<template>
 		
-		<paper-input-container id="container" disabled$="[[disabled]]" attr-for-value="value"
+		<paper-input-container id="container" disabled$="[[disabled]]" attr-for-value="inner-value"
 							   no-label-float="[[noLabelFloat]]"
 							   always-float-label="[[_computeAlwaysFloatLabel(alwaysFloatLabel,placeholder)]]"
 							   auto-validate$="[[autoValidate]]" invalid="[[invalid]]">
@@ -167,6 +167,10 @@ style this element.
 				try {
 					this._valueInternallyChanged = true;
 					this.value = value;
+					// notify the parent paper-container that the value changed
+					this.fire('inner-value-changed', { value: value }, {
+						node: this.$.input
+					});
 				} finally {
 					this._valueInternallyChanged = false;
 				}
