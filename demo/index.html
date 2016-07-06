@@ -9,6 +9,7 @@
 	
 	<script src="../../webcomponentsjs/webcomponents-lite.js"></script>
 	
+	<link rel="import" href="../../polymer-reflection/polymer-reflection.html" />
 	<link rel="import" href="../cbn-iban-input.html">
 	<link rel="import" href="../../cbn-form/cbn-form.html" />
 </head>
@@ -22,8 +23,9 @@
 			
 			<h1>Standard</h1>
 			<div class="vertical-section">
-				<cbn-iban-input name="iban1" label="IBAN"></cbn-iban-input>
-				<cbn-iban-input name="iban2" label="IBAN (auto validate)" auto-validate></cbn-iban-input>
+				<cbn-iban-input name="iban1" label="IBAN" validation='{ "iban": true }'></cbn-iban-input>
+				<cbn-iban-input name="iban2" label="IBAN (auto validate)"
+						 validation='{ "iban": true }' auto-validate></cbn-iban-input>
 			</div>
 			
 			<h1>Pre-validated</h1>
