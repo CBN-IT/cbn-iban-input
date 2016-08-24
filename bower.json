@@ -15,7 +15,7 @@
         "polymer": "Polymer/polymer#^1.3.1",
         "iron-a11y-keys": "PolymerElements/iron-a11y-keys#^1.0.4",
         "paper-input": "PolymerElements/paper-input#^1.1.9",
-        "cbn-form": "git@bitbucket.org:cbn-it/cbn-form.git#master"
+        "cbn-form": "CBN-IT/cbn-form#master"
     },
     "devDependencies": {
         "web-component-tester": "Polymer/web-component-tester",
