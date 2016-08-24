@@ -12,56 +12,67 @@
 	<link rel="import" href="../../polymer-reflection/polymer-reflection.html" />
 	<link rel="import" href="../cbn-iban-input.html">
 	<link rel="import" href="../../cbn-form/cbn-form.html" />
+
+	<link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
+	<link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
 </head>
 <body unresolved>
 
 <div style="margin: 20px auto; width: 500px;">
 	
-	<template is="dom-bind">
-		
 		<form id="demoForm" is="cbn-form" model>
 			
 			<h1>Standard</h1>
-			<div class="vertical-section">
-				<cbn-iban-input name="iban1" label="IBAN" validation='{ "iban": true }'></cbn-iban-input>
-				<cbn-iban-input name="iban2" label="IBAN (auto validate)"
-						 validation='{ "iban": true }' auto-validate></cbn-iban-input>
-			</div>
-			
+			<demo-snippet class="centered-demo" style="position:relative">
+				<template is="dom-bind">
+					<div class="vertical-section">
+						<cbn-iban-input name="iban1" label="IBAN" validation='{ "iban": true }'></cbn-iban-input>
+						<cbn-iban-input name="iban2" label="IBAN (auto validate)"
+										validation='{ "iban": true }' auto-validate></cbn-iban-input>
+					</div>
+				</template>
+			</demo-snippet>
+			<br/>
 			<h1>Pre-validated</h1>
-			<div class="vertical-section">
-				<cbn-iban-input name="iban3" label="Ro" value="RO08 RNCB 0084 0108 0037 0002" auto-validate></cbn-iban-input>
-				<cbn-iban-input name="iban4" label="MasterCard" value="RO08 RNCB 0084 0108 0037 0002" auto-validate></cbn-iban-input>
-				<cbn-iban-input name="iban5" label="Discover" value="RO08 RNCB 0084 0108 0037 0002" auto-validate></cbn-iban-input>
-				<cbn-iban-input name="iban6" label="Invalid Discover Card" value="RO08 RNCB 0084 0108 0037 0002" auto-validate></cbn-iban-input>
-			</div>
-			
+			<demo-snippet class="centered-demo" style="position:relative">
+				<template is="dom-bind">
+					<div class="vertical-section">
+						<cbn-iban-input name="iban3" label="Ro" value="RO08 RNCB 0084 0108 0037 0002" auto-validate></cbn-iban-input>
+						<cbn-iban-input name="iban4" label="MasterCard" value="RO08 RNCB 0084 0108 0037 0002" auto-validate></cbn-iban-input>
+						<cbn-iban-input name="iban5" label="Discover" value="RO08 RNCB 0084 0108 0037 0002" auto-validate></cbn-iban-input>
+						<cbn-iban-input name="iban6" label="Invalid Discover Card" value="RO08 RNCB 0084 0108 0037 0002" auto-validate></cbn-iban-input>
+					</div>
+				</template>
+			</demo-snippet>
+			<br/>
 		</form>
 		
 		<p style="font-weight: bold;">Output: </p>
 		<pre id="stringifiedJson"></pre>
-	
-	</template>
+
 </div>
 
 <script>
-	var tpl = document.querySelector('template[is=dom-bind]');
-	
-	tpl.addEventListener('dom-change', function() {
-		/** @namespace tpl.$.demoForm */
-		var form = tpl.$.demoForm;
-		
-		function updateOutput() {
-			/** @namespace tpl.$.stringifiedJson */
-			tpl.$.stringifiedJson.textContent = JSON.stringify(form.model, null, 4);
-		}
-		
-		form.addEventListener('value-changed', updateOutput);
-		form.addEventListener('cbn-iban-details', function(event) {
-			console.log('cbn-iban details!', event.detail);
+	var form = document.querySelector('form[is=cbn-form]');
+	var tpls = document.querySelectorAll('template[is=dom-bind]');
+	var output = document.getElementById("stringifiedJson");
+	tpls.forEach(function(tpl,index){
+		tpl.addEventListener('dom-change', function() {
+			/** @namespace tpl.$.demoForm */
+
+			function updateOutput() {
+				/** @namespace tpl.$.stringifiedJson */
+				output.textContent = JSON.stringify(form.model, null, 4);
+			}
+
+			form.addEventListener('value-changed', updateOutput);
+			form.addEventListener('cbn-iban-details', function(event) {
+				console.log('cbn-iban details!', event.detail);
+			});
+			updateOutput();
 		});
-		updateOutput();
-	});
+	})
+	
 
 </script>
 
